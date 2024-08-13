@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Agenda</string>
+    <string name="add_data">Press the + button to add a TODO item.</string>
+    <string name="no_results_error">Search result not found, please clear the search for more results.</string>
+    <string name="add_error">Failed to add TODO</string>
+    <string name="todo_list">TODO List</string>
+    <string name="add_task">Add Task Name Here </string>
+    <string name="add_todo">Add TODO</string>
+    <string name="back">Back</string>
+    <string name="search_todo">Search TODOs</string>
+    <string name="task_name_required">Please enter task name</string>
+    <string name="ok">OK</string>
+    <string name="clear_text">clear</string>
+</resources>
