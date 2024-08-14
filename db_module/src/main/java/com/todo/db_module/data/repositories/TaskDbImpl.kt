@@ -9,10 +9,12 @@ class TaskDbImpl @Inject constructor(
     private val taskDao: TaskDao
 ) : TaskDbRepo {
 
+    //insert task into db
     override suspend fun insert(task: TaskEntity): Long {
         return taskDao.insert(task = task)
     }
 
+    //fetch all saved tasks
     override suspend fun getAllTasks(): List<TaskEntity>? {
         return taskDao.getAllTasks()
     }

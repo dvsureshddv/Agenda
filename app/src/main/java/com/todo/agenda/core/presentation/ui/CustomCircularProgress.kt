@@ -9,7 +9,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.todo.agenda.core.presentation.ui.theme.Black
-import com.todo.agenda.core.presentation.ui.theme.Primary
 
 @Composable
 fun CustomCircularProgress() {

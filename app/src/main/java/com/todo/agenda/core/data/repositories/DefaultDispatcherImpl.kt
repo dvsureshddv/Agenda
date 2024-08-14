@@ -4,7 +4,7 @@ import com.todo.agenda.core.domain.repositories.DefaultDispatcherRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
-
+//dispatchers
 class DefaultDispatcherImpl : DefaultDispatcherRepository {
     override val io: CoroutineDispatcher
         get() = Dispatchers.IO

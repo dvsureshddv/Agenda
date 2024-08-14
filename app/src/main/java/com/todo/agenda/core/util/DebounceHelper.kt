@@ -12,13 +12,13 @@ class DebounceHelper(
     private var debounceJob: Job? = null
 
     fun debounce(action: suspend () -> Unit) {
-        // Cancel any ongoing job
+        //cancel any ongoing job
         debounceJob?.cancel()
-        // Create a new job
+        //create a new job
         debounceJob = coroutineScope.launch {
-            // Delay the action
+            //delay the action
             delay(delayMillis)
-            // Perform the action
+            //perform the action
             action()
         }
     }

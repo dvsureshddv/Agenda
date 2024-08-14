@@ -26,6 +26,7 @@ fun CustomAppBar(
     isToShowBackButton: Boolean = false,
     onBackButtonClick: () -> Unit
 ) {
+    // custom appbar
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Primary,

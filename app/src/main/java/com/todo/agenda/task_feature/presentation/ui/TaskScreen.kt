@@ -32,7 +32,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -67,12 +66,14 @@ fun TaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
 
 
     LaunchedEffect(Unit) {
+        //fetch all tasks which are stored
         viewModel.fetchAllTasks()
     }
 
 
     Scaffold(
         topBar = {
+            //appbar
             CustomAppBar(
                 title = stringResource(id = R.string.todo_list),
                 isToShowBackButton = false,
@@ -80,6 +81,7 @@ fun TaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
             )
         },
         floatingActionButton = {
+            //add task action
             FloatingActionButton(
                 containerColor = Primary, // Customize the background color
                 contentColor = White,     // Customize the icon color
@@ -90,6 +92,7 @@ fun TaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
                 Icon(Icons.Default.Add, contentDescription = "Add Task")
             }
 
+            //error alert
             errorMessage?.let { msg ->
                 ErrorPopup(
                     errorMessage = msg,
@@ -99,21 +102,23 @@ fun TaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
                 )
             }
         },
-
-        ) { paddingValues ->
+    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
 
+            //observe the state when changed
             when (tasksState) {
                 is OperationState.Loading -> {
+                    //progress
                     CustomCircularProgress()
                 }
 
                 is OperationState.Failure -> {
 
+                    //failed state
                     Text(
                         text = stringResource(id = R.string.add_data),
                         style = TextStyle(
@@ -140,6 +145,8 @@ fun TaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
                     } else {
                         Column(modifier = Modifier.fillMaxSize()) {
                             if (tasks?.isNotEmpty() == true) {
+
+                                //search box
                                 SearchBar(
                                     searchQuery = searchQuery,
                                     onSearchQueryChange = { query ->
@@ -153,6 +160,7 @@ fun TaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
                                 )
                             }
                             (if (searchQuery.isEmpty()) tasks else filteredTasks)?.let {
+                                // empty state handling and list
                                 TaskContent(
                                     tasks = it
                                 )
@@ -238,6 +246,7 @@ fun TaskContent(
     tasks: List<TaskModel>
 ) {
     if (tasks.isEmpty()) {
+        //failed state
         Text(
             text = stringResource(id = R.string.no_results_error),
             style = TextStyle(
@@ -247,14 +256,16 @@ fun TaskContent(
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding( 14.dp),
+                .padding(14.dp),
         )
     } else {
+        //list of tasks
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(tasks.size) { index ->
+                // each task item
                 TaskItem(task = tasks[index])
             }
         }

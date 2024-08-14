@@ -56,6 +56,7 @@ fun AddTaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
 
     // Collect events from SharedFlow
     LaunchedEffect(Unit) {
+        //observe the state when changes happened
         viewModel.insertTaskObs.collectLatest { state ->
             when (state) {
                 is OperationState.Loading -> {
@@ -84,7 +85,7 @@ fun AddTaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
 
 
     Scaffold(topBar = {
-
+        //appbar
         CustomAppBar(
             title = stringResource(id = R.string.add_todo),
             isToShowBackButton = true,
@@ -98,6 +99,7 @@ fun AddTaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
+            // add task entry
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -171,12 +173,14 @@ fun AddTaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
             }
 
             if (showLoading) {
+                //progress
                 CustomCircularProgress()
             }
         }
     }
 }
 
+//allow only for alpha numeric
 fun isAlphanumericOrSpace(text: String): Boolean {
     return text.all { it.isLetterOrDigit() || it.isWhitespace() }
 }

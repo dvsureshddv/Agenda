@@ -15,6 +15,7 @@ import com.todo.agenda.core.presentation.ui.theme.Black
 
 @Composable
 fun ErrorPopup(errorMessage: String, onDismiss: () -> Unit) {
+    //error alert
     AlertDialog(
         onDismissRequest = onDismiss,
         text = {

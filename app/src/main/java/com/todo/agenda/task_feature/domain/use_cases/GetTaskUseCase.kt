@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GetTaskUseCase @Inject constructor(
     private val taskRepo: TaskRepo
 ) {
-
+    //fetch all tasks which are stored
     suspend fun getAllTask(): List<TaskModel>? {
         return taskRepo.getAllTasks()
     }

@@ -7,6 +7,7 @@ import com.todo.agenda.core.domain.repositories.DefaultDispatcherRepository
 import com.todo.agenda.core.resources.ResourceProvider
 import com.todo.agenda.core.util.DebounceHelper
 import com.todo.agenda.core.util.OperationState
+import com.todo.agenda.task_feature.domain.exceptions.FailedToAddTodoException
 import com.todo.agenda.task_feature.domain.models.TaskModel
 import com.todo.agenda.task_feature.domain.use_cases.FilterTaskUseCase
 import com.todo.agenda.task_feature.domain.use_cases.TaskUseCase
@@ -63,18 +64,12 @@ class TaskViewModel @Inject constructor(
         }
     }
 
+    //add task state
     fun insertTasks(data: String) {
         viewModelScope.launch(dispatcherRepo.io) {
             _insertTaskObs.emit(OperationState.Loading)
             delay(3000)
-            //if input task is error then thrown an error message
-            if (data.trim().equals("Error", true)) {
-               _insertTaskObs.emit(
-                    OperationState.Failure(failureMsg = resourceProvider.getString(R.string.add_error))
-                )
-                setErrorMessage(resourceProvider.getString(R.string.add_error))
-            }else {
-
+            try {
                 val taskModel = TaskModel(
                     taskName = data.trim()
                 )
@@ -91,24 +86,40 @@ class TaskViewModel @Inject constructor(
                 } else {
                     _insertTaskObs.emit(OperationState.Success(true))
                 }
+            } catch (e: FailedToAddTodoException) {
+                e.printStackTrace()
+                _insertTaskObs.emit(
+                    OperationState.Failure(failureMsg = resourceProvider.getString(R.string.add_error))
+                )
+                setErrorMessage(resourceProvider.getString(R.string.add_error))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _insertTaskObs.emit(
+                    OperationState.Failure(failureMsg = resourceProvider.getString(R.string.add_error))
+                )
+                setErrorMessage(resourceProvider.getString(R.string.add_error))
             }
 
         }
     }
 
+    //error state
     private fun setErrorMessage(message: String) {
         viewModelScope.launch {
             _errorMessageState.value = message
         }
     }
 
+    //clear the error state
     fun clearErrorMessage() {
         viewModelScope.launch {
             _errorMessageState.value = null
         }
     }
 
+    //search for tasks
     fun filterTasksWithDelay(query: String) {
+        //debounce for delaying the query hit
         debounceHelper.debounce {
             val taskList =
                 (taskObs.replayCache.lastOrNull() as? OperationState.Success)?.response.orEmpty()
