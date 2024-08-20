@@ -83,6 +83,7 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.mockito.android)
     testImplementation(libs.arch.core.testing)
+    testImplementation(libs.mockito.kotlin)
 
     //modules goes here
     implementation(project(":db_module"))

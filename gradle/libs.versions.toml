@@ -20,6 +20,7 @@ roomCompiler = "2.6.1"
 roomKtx = "2.6.1"
 roomRuntime = "2.6.1"
 archCoreVersion = "2.1.0"
+mockitoKotlinVersion = "4.1.0"
 
 
 [libraries]
@@ -47,6 +48,7 @@ mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mo
 mockito-inline = { group = "org.mockito", name = "mockito-inline", version.ref = "mockitoVersion" }
 mockito-android = { group = "org.mockito", name = "mockito-android", version.ref = "mockitoVersion" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTestVersion" }
+mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitoKotlinVersion" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationComposeVersion" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
