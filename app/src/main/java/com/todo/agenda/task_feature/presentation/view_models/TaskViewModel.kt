@@ -48,7 +48,6 @@ class TaskViewModel @Inject constructor(
     fun fetchAllTasks() {
         viewModelScope.launch(dispatcherRepo.io) {
             _taskObs.value = OperationState.Loading
-            try {
                 val taskList = taskUseCase.getAllTask()
                 if (taskList.isNullOrEmpty()) {
                     _taskObs.value =
@@ -56,12 +55,6 @@ class TaskViewModel @Inject constructor(
                 } else {
                     _taskObs.value = OperationState.Success(taskList)
                 }
-            } catch (e: Exception) {
-                _taskObs.value = OperationState.Failure(
-                    failureMsg = e.message ?: resourceProvider.getString(R.string.add_data)
-                )
-            }
-
         }
     }
 
