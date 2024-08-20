@@ -60,7 +60,7 @@ import com.todo.agenda.task_feature.presentation.view_models.TaskViewModel
 @Composable
 fun TaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
     val tasksState by viewModel.taskObs.collectAsState()
-    var searchQuery by rememberSaveable { mutableStateOf("") }
+    var searchQuery by rememberSaveable { mutableStateOf<String?>(null) }
     val filteredTasks by viewModel.filteredTasks.collectAsState()
     val errorMessage by viewModel.errorMessageState.collectAsState()
 
@@ -86,7 +86,8 @@ fun TaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
                 containerColor = Primary, // Customize the background color
                 contentColor = White,     // Customize the icon color
                 onClick = {
-                    searchQuery = ""
+                    searchQuery = null
+                    viewModel.reseatSearch()
                     navController.navigate(Routes.ADD_TASK)
                 }) {
                 Icon(Icons.Default.Add, contentDescription = "Add Task")
@@ -145,26 +146,26 @@ fun TaskScreen(navController: NavHostController, viewModel: TaskViewModel) {
                     } else {
                         Column(modifier = Modifier.fillMaxSize()) {
                             if (tasks?.isNotEmpty() == true) {
-
-                                //search box
+                                // Search box
                                 SearchBar(
-                                    searchQuery = searchQuery,
+                                    searchQuery = searchQuery ?: "",
                                     onSearchQueryChange = { query ->
                                         searchQuery = query
                                         viewModel.filterTasksWithDelay(query = query)
                                     },
                                     onCloseSearchClicked = {
                                         searchQuery = ""
-                                        viewModel.filterTasksWithDelay("")
+                                        viewModel.filterTasksWithDelay(query = "")
                                     }
                                 )
                             }
-                            (if (searchQuery.isEmpty()) tasks else filteredTasks)?.let {
-                                // empty state handling and list
-                                TaskContent(
-                                    tasks = it
-                                )
+
+                            val tasksToShow = filteredTasks ?: tasks
+                            if (tasksToShow != null) {
+                                TaskContent(tasks = tasksToShow)
                             }
+
+
                         }
                     }
 

@@ -39,8 +39,9 @@ class TaskViewModel @Inject constructor(
     private val _errorMessageState = MutableStateFlow<String?>(null)
     val errorMessageState: StateFlow<String?> = _errorMessageState
 
-    private val _filteredTasks = MutableStateFlow(emptyList<TaskModel>())
-    val filteredTasks: StateFlow<List<TaskModel>> = _filteredTasks
+    private val _filteredTasks = MutableStateFlow<List<TaskModel>?>(null)
+    val filteredTasks: StateFlow<List<TaskModel>?> = _filteredTasks
+
 
     private val debounceHelper = DebounceHelper(viewModelScope, 2000L)
 
@@ -91,13 +92,13 @@ class TaskViewModel @Inject constructor(
                 _insertTaskObs.emit(
                     OperationState.Failure(failureMsg = resourceProvider.getString(R.string.add_error))
                 )
-                setErrorMessage(resourceProvider.getString(R.string.add_error))
+                setErrorMessage(message = resourceProvider.getString(R.string.add_error))
             } catch (e: Exception) {
                 e.printStackTrace()
                 _insertTaskObs.emit(
                     OperationState.Failure(failureMsg = resourceProvider.getString(R.string.add_error))
                 )
-                setErrorMessage(resourceProvider.getString(R.string.add_error))
+                setErrorMessage(message = resourceProvider.getString(R.string.add_error))
             }
 
         }
@@ -118,14 +119,22 @@ class TaskViewModel @Inject constructor(
     }
 
     //search for tasks
-    fun filterTasksWithDelay(query: String) {
+    fun filterTasksWithDelay(query: String?) {
         //debounce for delaying the query hit
         debounceHelper.debounce {
-            val taskList =
-                (taskObs.replayCache.lastOrNull() as? OperationState.Success)?.response.orEmpty()
-            val result = filterTaskUseCase.filterTasks(tasks = taskList, query = query)
-            _filteredTasks.value = result
+            searchMechanism(query = query)
         }
+    }
+
+    fun reseatSearch() {
+        _filteredTasks.value = null
+    }
+
+    private fun searchMechanism(query: String?){
+        val taskList =
+            (taskObs.replayCache.lastOrNull() as? OperationState.Success)?.response.orEmpty()
+        val result = filterTaskUseCase.filterTasks(tasks = taskList, query = query ?: "")
+        _filteredTasks.value = result
     }
 
 }
